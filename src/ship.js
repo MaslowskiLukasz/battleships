@@ -14,9 +14,13 @@ function shipFactory(shipLength) {
     return hitMarks.length === length;
   }
 
+  const getHitMarks = () => {
+    return [...hitMarks];
+  }
+
   return {
-    hitMarks,
     hit,
+    getHitMarks,
     isSunk,
   }
 }

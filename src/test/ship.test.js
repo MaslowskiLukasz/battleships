@@ -4,7 +4,7 @@ describe('ship factory testing', () => {
   test('ship marks correct hit position', () => {
     const ship = shipFactory(3);
     ship.hit(2);
-    expect(ship.hitMarks).toContain(2);
+    expect(ship.getHitMarks()).toContain(2);
   });
 
   test('check if ship is sunk when it should be', () => {
