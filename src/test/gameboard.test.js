@@ -69,4 +69,20 @@ describe('gameboard factory testing', () => {
     ]));
   });
 
+  test('report if all ships have been sunk', () => {
+    const gameboard = gameboardFactory();
+    gameboard.addShip(0, 0, 2);
+    gameboard.receiveAttack(0, 0);
+    gameboard.receiveAttack(1, 0);
+    expect(gameboard.areAllShipsSunk()).toBe(true);
+  });
+
+  test('report if not all ships are sunk', () => {
+    const gameboard = gameboardFactory();
+    gameboard.addShip(0, 0, 2);
+    gameboard.receiveAttack(0, 0);
+    expect(gameboard.areAllShipsSunk()).toBe(false);
+
+  });
+
 });

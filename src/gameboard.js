@@ -43,6 +43,10 @@ function gameboardFactory() {
     return (x >= item.x && x < item.x + item.ship.getLength()) && (item.y === y)
   }
 
+  const areAllShipsSunk = () => {
+    return ships.every((item) => item.ship.isSunk());
+  }
+
   const addMissed = (x, y) => missed.push( {x: x, y: y} );
   const addHit = (x, y) => hits.push( {x: x, y: y} );
   const getShips = () => [...ships];  
@@ -55,6 +59,7 @@ function gameboardFactory() {
     receiveAttack,
     getMisses,
     getHits,
+    areAllShipsSunk,
   }
 }
 
