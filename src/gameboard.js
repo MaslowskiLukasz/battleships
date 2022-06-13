@@ -11,12 +11,27 @@ function gameboardFactory() {
   }
 
   const receiveAttack = (x, y) => {
-    if(ships.find((item) => item.isVertical ?
-      checkVertical(x, y, item) :
-      checkHorizontal(x, y, item) )) {
+    const shipHit = ships.find((item) =>
+      (
+        item.isVertical ?
+        checkVertical(x, y, item) :
+        checkHorizontal(x, y, item)
+      )
+    );
+
+    if(shipHit) {
       addHit(x, y);
+      sendHitToShip(x, y, shipHit);
     } else {
       addMissed(x, y);
+    }
+  }
+
+  const sendHitToShip = (x, y, item) => {
+    if (item.isVertical) {
+      item.ship.hit(y - item.y);
+    } else {
+      item.ship.hit(x - item.x);
     }
   }
 
