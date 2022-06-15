@@ -50,4 +50,36 @@ describe('player testing', () => {
     .toThrow('can\'t attack in previously attacked space');
   });
 
+  test('AI generates legal move', () => {
+    const player1 = player();
+    const { x, y } = player1.generateNextMove();
+    
+    expect(x).toBeDefined();
+    expect(x).toBeGreaterThanOrEqual(0);
+    expect(x).toBeLessThan(10);
+
+    expect(y).toBeDefined();
+    expect(y).toBeGreaterThanOrEqual(0);
+    expect(y).toBeLessThan(10);
+  });
+
+  test('AI doesn\'t generate the same move two times', () => {
+    const player1 = player();
+    const board2 = gameboardFactory();
+    let generatedMoves = [];
+
+    for (let i = 0; i < 100; i++) {
+      generatedMoves.push(player1.generateNextMove());
+      player1.attack(generatedMoves[i].x, generatedMoves[i].y, board2);
+    }
+
+    const combinedCoordinates = generatedMoves.map((item) => {
+      return `${item.x}, ${item.y}`;
+    });
+
+    const uniqueValues = new Set(combinedCoordinates);
+
+    expect(uniqueValues.size).toBe(generatedMoves.length);
+  });
+
 });
