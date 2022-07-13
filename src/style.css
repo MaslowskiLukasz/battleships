@@ -1,0 +1,20 @@
+body {
+  color: white;
+  background-color: black;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, 2em);
+  grid-template-rows: repeat(10, 2em);
+}
+
+.area {
+  min-width: 2em;
+  min-height: 2em;
+  border: 1px solid white;
+}
+
+.found {
+  border: 2px solid red;
+}
