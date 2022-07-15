@@ -30,8 +30,7 @@ const start = () => {
 
 const placeShips = (board) => {
   ships.map((ship, index) => {
-    const length = ship.length;
-    board.addShip(0, index, length, false);
+    board.addShip(0, index, ship.length, false);
   });
 }
 
