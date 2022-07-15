@@ -26,12 +26,42 @@ const start = () => {
 
   placeShips(playerGameboard);
   placeShips(AIGameboard);
+
+  let playersTurn = false;
+  while (!playerGameboard.areAllShipsSunk() && !AIGameboard.areAllShipsSunk()) {
+    if (playersTurn) {
+      attack(player1, AIGameboard);
+    } else {
+      attack(AI, playerGameboard);
+    }
+    playersTurn = !playersTurn;
+  }
+
+  if(playerGameboard.areAllShipsSunk()) {
+    console.log('AI won');
+    console.log(
+      `Player hit: ${AIGameboard.getHits().length} times.
+      AI hit: ${playerGameboard.getHits().length} times`
+    );
+  } else {
+    console.log('Player won');
+    console.log(
+      `Player hit: ${AIGameboard.getHits().length} times.
+      AI hit: ${playerGameboard.getHits().length} times`
+    );
+  }
+
 }
 
 const placeShips = (board) => {
   ships.map((ship, index) => {
     board.addShip(0, index, ship.length, false);
   });
+}
+
+const attack = (player, enemyBoard) => {
+  const { x, y } = player.generateNextMove();
+  player.attack(x, y, enemyBoard);
 }
 
 export default start;
