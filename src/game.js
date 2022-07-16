@@ -1,4 +1,4 @@
-import { initUI, renderShips } from "./UIUtils";
+import { initUI, renderShips, getCoords, logStatus, logWinner } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
 import ships from "./utils";
@@ -16,6 +16,22 @@ import ships from "./utils";
   4.2 attack opponents gameboard
   4.3 switch player
 */
+
+/*
+game should invoke:
+setup boards
+init ship placement phase -> add listeners to place players ships
+place AI ships randomly
+init game phase -> add listeners for attacking
+  on click player attacks
+    update board
+    check if all enemy ships are sunk
+      if yes display game over
+  AI attacks
+    update board
+    check if all player ships are sunk
+      if yes display game over
+*/
 const player1 = player();
 const AI = player();
 const playerGameboard = gameboardFactory();
@@ -23,19 +39,27 @@ const AIGameboard = gameboardFactory();
 
 const start = () => {
   initUI();
-  addEventListeners();
-
-  placeShips(playerGameboard);
-  placeShips(AIGameboard);
-
-  renderShips(AIGameboard.getShips());
-
-  if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
-    logWinner(playerGameboard, AIGameboard);
-  }
+  initGame();
 }
 
-const addEventListeners = () => {
+const initGame = () => {
+  placeShipsTmp(AIGameboard);
+  renderShips(AIGameboard.getShips(), true);
+  renderShips(playerGameboard.getShips(), false);
+
+  setupShipPlacementStage();
+}
+
+const setupShipPlacementStage = () => {
+  const playerBoard = document.getElementById('player-board');
+  const areas = Array.from(playerBoard.querySelectorAll('button'));
+
+  areas.map((area) => {
+    area.addEventListener('click', placeShips);
+  })
+}
+
+const setupGameloop = () => {
   const AIBoard = document.getElementById('ai-board');
   const areas = Array.from(AIBoard.querySelectorAll('button'));
 
@@ -44,35 +68,22 @@ const addEventListeners = () => {
   });
 }
 
-const logWinner = (playerGameboard, AIGameboard) => {
-  if(playerGameboard.areAllShipsSunk()) {
-    console.log('AI won');
-    console.log(
-      `Player hit: ${AIGameboard.getHits().length} times.
-      AI hit: ${playerGameboard.getHits().length} times`
-    );
+const placeShips = (event) => {
+  const { x, y } = getCoords(event.target);
+
+  const currentShipsNumber = playerGameboard.getShips().length;
+  if (currentShipsNumber === ships.length) {
+    console.log('all ships have been placed')
+    setupGameloop();
   } else {
-    console.log('Player won');
-    console.log(
-      `Player hit: ${AIGameboard.getHits().length} times.
-      AI hit: ${playerGameboard.getHits().length} times`
-    );
+    playerGameboard.addShip(x, y, ships[currentShipsNumber].length);
   }
+
+  renderShips(playerGameboard.getShips(), false);
 }
 
-const logStatus = () => {
-  console.log(
-    `Player hit: ${AIGameboard.getHits().length} times.
-    Player missed: ${AIGameboard.getMisses().length} times`
-  );
 
-  console.log(
-    `AI hit: ${playerGameboard.getHits().length} times.
-    AI missed: ${playerGameboard.getMisses().length} times`
-  );
-}
-
-const placeShips = (board) => {
+const placeShipsTmp = (board) => {
   ships.map((ship, index) => {
     board.addShip(0, index, ship.length, false);
   });
@@ -84,15 +95,18 @@ const randomAttack = (player, enemyBoard) => {
 }
 
 const attack = (event) => {
-  const area = event.target;
-  const x = parseInt(area.getAttribute('x'));
-  const y = parseInt(area.getAttribute('y'));
+  const { x, y } = getCoords(event.target);
 
   player1.attack(x, y, AIGameboard);
-
   randomAttack(AI, playerGameboard);
+  logStatus(playerGameboard, AIGameboard);
+  checkGameOver();
+}
 
-  logStatus();
+const checkGameOver = () => {
+  if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
+    logWinner(playerGameboard, AIGameboard);
+  }
 }
 
 export default start;
