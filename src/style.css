@@ -15,6 +15,18 @@ body {
   border: 1px solid white;
 }
 
+.hit {
+  background-color: #F37878;
+}
+
+.miss {
+  background-color: #ABC9FF;
+}
+
+.ship {
+  border: 1px solid black;
+}
+
 .found {
   border: 2px solid red;
 }
