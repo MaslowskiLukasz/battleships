@@ -7,6 +7,16 @@ function gameboardFactory() {
 
   const addShip = (x, y, length = 1, isVertical = false) => {
     const ship = shipFactory(length);
+
+    if (isVertical) {
+      if (y + length > 10) {
+        throw('ship out of bounds');
+      }
+    } else {
+      if (x + length > 10) {
+        throw('ship out of bounds');
+      }
+    }
     ships.push( {x: x, y: y, ship: ship, isVertical: isVertical} );
   }
 

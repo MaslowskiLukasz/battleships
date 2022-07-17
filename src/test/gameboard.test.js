@@ -17,6 +17,19 @@ describe('gameboard factory testing', () => {
     ]));
   });
 
+  test('create ship out of bounds', () => {
+    const gameboard = gameboardFactory();
+    expect(() => gameboard.addShip(8, 0, 5))
+    .toThrow('ship out of bounds');
+  });
+
+  test('overlapping ships', () => {
+    const gameboard = gameboardFactory();
+    gameboard.addShip(0, 0, 5);
+    expect(() => gameboard.addShip(2, 0, 3))
+    .toThrow('ships cannot overlap');
+  });
+
   test('receiveAttack - adds miss to missed attacks - no ships on board (1)', () => {
     const  gameboard = gameboardFactory();
     gameboard.receiveAttack(0, 0);
