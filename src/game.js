@@ -5,10 +5,9 @@ import ships from "./utils";
 
 /*
 TODO
-gameboard -> function to randomly place ships
-  -> add tests
 ui -> add restart functionality
 ui -> add button to rotate ship
+ui -> show where the ship will be placed
 */
 const player1 = player();
 const AI = player();
@@ -21,7 +20,7 @@ const start = () => {
 }
 
 const initGame = () => {
-  placeShipsTmp(AIGameboard);
+  AIGameboard.placeShipsRandomly(ships);
   renderShips(AIGameboard.getShips(), true);
   renderShips(playerGameboard.getShips(), false);
 
@@ -60,12 +59,6 @@ const placeShips = (event) => {
   }
 
   renderShips(playerGameboard.getShips(), false);
-}
-
-const placeShipsTmp = (board) => {
-  ships.map((ship, index) => {
-    board.addShip(0, index, ship.length, false);
-  });
 }
 
 const randomAttack = (player, enemyBoard) => {
