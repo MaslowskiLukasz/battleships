@@ -1,9 +1,48 @@
-const initUI = () => {
-  const body = document.body;
+const createGameScreen = () => {
   const wrapper = document.createElement('div');
   wrapper.appendChild(createPlayerScreen('AI', true));
   wrapper.appendChild(createPlayerScreen('Player', false));
+  wrapper.id = 'boards-wrapper';
+  wrapper.classList.add('hidden');
+  
+  return wrapper;
+}
 
+const initUI = () => {
+  const body = document.body;
+  const startScreen = document.createElement('div');
+  const header = document.createElement('h1');
+  const startButton = document.createElement('button');
+  const boards = createGameScreen();
+
+  header.textContent = 'Welcome to Battleships';
+  startButton.textContent = 'Start';
+  startButton.addEventListener('click', showGameScreen);
+  startScreen.id = 'start-screen';
+
+  startScreen.appendChild(header);
+  startScreen.appendChild(startButton);  
+  body.appendChild(startScreen);
+  body.appendChild(boards);
+}
+
+const showGameScreen = () => {
+  const boards = document.getElementById('boards-wrapper');
+  const startScreen = document.getElementById('start-screen');
+  startScreen.classList.add('hidden');
+  boards.classList.remove('hidden');
+}
+
+const showEndScreen = () => {
+  const body = document.body;
+  const gameScreen = document.getElementById('boards-wrapper');
+  const wrapper = document.createElement('div');
+  const header = document.createElement('h1');
+  
+  header.textContent = 'Game over';
+  wrapper.appendChild(header);
+  
+  gameScreen.classList.add('hidden');
   body.appendChild(wrapper);
 }
 
@@ -70,6 +109,7 @@ const renderShips = (shipPlacement, isAI) => {
       for (let x = startX; x < startX + currShip.ship.getLength(); x++) {
         const area = playerBoard.querySelector(`[x="${x}"][y="${startY}"]`);
         area.textContent = '0';
+        area.classList.add('ship');
       }
     }
   });
@@ -82,7 +122,44 @@ const getCoords = (area) => {
   return { x: x, y: y }
 }
 
+const renderBoards = (playerGameboard, AIGameboard) => {
+  renderMisses(playerGameboard, false);
+  renderHits(playerGameboard, false);
+  renderMisses(AIGameboard, true);
+  renderHits(AIGameboard, true);
+}
 
+const renderMisses = (board, isAI) => {
+  const misses = board.getMisses();
+
+  let gameboard;
+  if (isAI) {
+    gameboard = document.getElementById('ai-board');
+  } else {
+    gameboard = document.getElementById('player-board');
+  }
+
+  misses.map((miss) => {
+    const area = gameboard.querySelector(`[x="${miss.x}"][y="${miss.y}"]`);
+    area.classList.add('miss');
+  });
+}
+
+const renderHits = (board, isAI) => {
+  const hits = board.getHits();
+  
+  let gameboard;
+  if (isAI) {
+    gameboard = document.getElementById('ai-board');
+  } else {
+    gameboard = document.getElementById('player-board');
+  }
+
+  hits.map((hit) => {
+    const area = gameboard.querySelector(`[x="${hit.x}"][y="${hit.y}"]`);
+    area.classList.add('hit');
+  });
+}
 
 const logWinner = (playerGameboard, AIGameboard) => {
   if(playerGameboard.areAllShipsSunk()) {
@@ -118,4 +195,6 @@ export {
   getCoords,
   logStatus,
   logWinner,
+  renderBoards,
+  showEndScreen,
 };
