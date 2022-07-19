@@ -1,36 +1,14 @@
-import { initUI, renderShips, getCoords, logStatus, logWinner } from "./UIUtils";
+import { initUI, renderShips, getCoords, logStatus, logWinner, renderBoards, showEndScreen } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
 import ships from "./utils";
 
-/* TODO
-1. create players
-2. create gameboards
-3. place ships
-  3.1 iterate over utils -> ships
-    3.1.1 create ship
-    3.1.2 get coordinates from UI / generate random for AI (can be done later)
-    3.1.3 add ship to gameboard
-4. until somebodys all ships are sunk
-  4.1 get attack coords
-  4.2 attack opponents gameboard
-  4.3 switch player
-*/
-
 /*
-game should invoke:
-setup boards
-init ship placement phase -> add listeners to place players ships
-place AI ships randomly
-init game phase -> add listeners for attacking
-  on click player attacks
-    update board
-    check if all enemy ships are sunk
-      if yes display game over
-  AI attacks
-    update board
-    check if all player ships are sunk
-      if yes display game over
+TODO
+gameboard -> function to randomly place ships
+  -> add tests
+ui -> add restart functionality
+ui -> add button to rotate ship
 */
 const player1 = player();
 const AI = player();
@@ -72,16 +50,17 @@ const placeShips = (event) => {
   const { x, y } = getCoords(event.target);
 
   const currentShipsNumber = playerGameboard.getShips().length;
-  if (currentShipsNumber === ships.length) {
+  if (currentShipsNumber !== ships.length) {
+    playerGameboard.addShip(x, y, ships[currentShipsNumber].length);
+  }
+
+  if (playerGameboard.getShips().length === ships.length) {
     console.log('all ships have been placed')
     setupGameloop();
-  } else {
-    playerGameboard.addShip(x, y, ships[currentShipsNumber].length);
   }
 
   renderShips(playerGameboard.getShips(), false);
 }
-
 
 const placeShipsTmp = (board) => {
   ships.map((ship, index) => {
@@ -100,12 +79,14 @@ const attack = (event) => {
   player1.attack(x, y, AIGameboard);
   randomAttack(AI, playerGameboard);
   logStatus(playerGameboard, AIGameboard);
+  renderBoards(playerGameboard, AIGameboard);
   checkGameOver();
 }
 
 const checkGameOver = () => {
   if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
     logWinner(playerGameboard, AIGameboard);
+    showEndScreen();
   }
 }
 
