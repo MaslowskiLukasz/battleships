@@ -8,12 +8,8 @@ function gameboardFactory() {
   const addShip = (x, y, length = 1, isVertical = false) => {
     const ship = shipFactory(length);
 
-    if ((isVertical && y + length > 10) || (!isVertical && x + length > 10)) {
-      throw('ship out of bounds');
-    }
-
-    if (isShipOverlapping({ x: x, y: y, ship: ship, isVertical: isVertical })) {
-      throw('ships cannot overlap');
+    if (!isShipPlacementValid({ x:x, y: y, ship: ship, isVertical: isVertical})) {
+      throw('ship placement is not valid');
     }
 
     ships.push( {x: x, y: y, ship: ship, isVertical: isVertical} );
@@ -42,6 +38,20 @@ function gameboardFactory() {
     return false;
   }
 
+  const placeShipsRandomly = (shipList) => {
+    shipList.map((ship) => {
+      const { x, y } = getRandomCoords();
+      console.log(`x = ${x}, y = ${y}`);
+      const isVertical = getRandomOrientation();
+      console.log(`vertical = ${isVertical}`);
+      try {
+        addShip(x, y, ship.ship.getLength(), isVertical);
+      } catch (error) {
+        console.log('ships overlapping or out of bounds');
+      }
+    });
+  }
+
   const receiveAttack = (x, y) => {
     const shipHit = ships.find((item) =>
       (
@@ -67,6 +77,19 @@ function gameboardFactory() {
     }
   }
 
+  const isShipPlacementValid = (ship) => {
+    if ((ship.isVertical && ship.y + ship.ship.getLength() > 10) ||
+      (!ship.isVertical && ship.x + ship.ship.getLength() > 10)) {
+        return false;
+    }
+
+    if (isShipOverlapping(ship)) {
+      return false;
+    }
+
+    return true;
+  }
+
   const checkVertical = (x, y, item) => {
     return (y >= item.y && y < item.y + item.ship.getLength()) && (item.x === x)
   }
@@ -84,6 +107,12 @@ function gameboardFactory() {
   const getShips = () => [...ships];  
   const getMisses = () => [...missed];
   const getHits = () => [...hits];
+  const getRandomOrientation = () => Math.random() > 0.5 ? true : false;
+  const getRandomCoords = () => {
+    const x = Math.floor(Math.random() * 10);
+    const y = Math.floor(Math.random() * 10)
+    return { x: x, y: y };
+  }
 
   return {
     addShip,
@@ -92,6 +121,7 @@ function gameboardFactory() {
     getMisses,
     getHits,
     areAllShipsSunk,
+    placeShipsRandomly,
   }
 }
 
