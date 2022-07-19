@@ -17,16 +17,30 @@ describe('gameboard factory testing', () => {
     ]));
   });
 
-  test('create ship out of bounds', () => {
+  test('create ship out of bounds - horizontal', () => {
     const gameboard = gameboardFactory();
     expect(() => gameboard.addShip(8, 0, 5))
     .toThrow('ship out of bounds');
   });
 
-  test('overlapping ships', () => {
+  test('create ship out of bounds - vertical', () => {
+    const gamebaord = gameboardFactory();
+    expect(() => gamebaord.addShip(0, 8, 4, true))
+    .toThrow('ship out of bounds');
+  });
+
+  test('overlapping ships - horizontal', () => {
     const gameboard = gameboardFactory();
-    gameboard.addShip(0, 0, 5);
-    expect(() => gameboard.addShip(2, 0, 3))
+    gameboard.addShip(2, 6, 5);
+    gameboard.addShip(2, 0, 5);
+    expect(() => gameboard.addShip(1, 0, 3))
+    .toThrow('ships cannot overlap');
+  });
+
+  test('overlapping ships - vertical', () => {
+    const gameboard = gameboardFactory();
+    gameboard.addShip(3, 3, 5);
+    expect(() => gameboard.addShip(5, 2, 4, true))
     .toThrow('ships cannot overlap');
   });
 

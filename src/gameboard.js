@@ -8,16 +8,38 @@ function gameboardFactory() {
   const addShip = (x, y, length = 1, isVertical = false) => {
     const ship = shipFactory(length);
 
-    if (isVertical) {
-      if (y + length > 10) {
-        throw('ship out of bounds');
-      }
-    } else {
-      if (x + length > 10) {
-        throw('ship out of bounds');
+    if ((isVertical && y + length > 10) || (!isVertical && x + length > 10)) {
+      throw('ship out of bounds');
+    }
+
+    if (isShipOverlapping({ x: x, y: y, ship: ship, isVertical: isVertical })) {
+      throw('ships cannot overlap');
+    }
+
+    ships.push( {x: x, y: y, ship: ship, isVertical: isVertical} );
+  }
+
+  const isShipOverlapping = (currShip) => {
+    const shipLength = currShip.ship.getLength() - 1;
+    const newShipStartX = currShip.x;
+    const newShipEndX = currShip.isVertical ? currShip.x : currShip.x + shipLength;
+    const newShipStartY = currShip.y;
+    const newShipEndY = currShip.isVertical ? currShip.y + shipLength : currShip.y; 
+
+    for (const ship of ships) {
+      const length = ship.ship.getLength() - 1;
+      const shipStartX = ship.x;
+      const shipEndX = ship.isVertical ? ship.x : ship.x + length;
+      const shipStartY = ship.y;
+      const shipEndY = ship.isVertical ? ship.y + length : ship.y;
+
+      if (!(newShipStartX > shipEndX || newShipStartY > shipEndY ||
+        newShipEndX < shipStartX || newShipEndY < shipStartY)) {
+          return true;
       }
     }
-    ships.push( {x: x, y: y, ship: ship, isVertical: isVertical} );
+    
+    return false;
   }
 
   const receiveAttack = (x, y) => {
