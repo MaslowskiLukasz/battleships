@@ -40,14 +40,17 @@ function gameboardFactory() {
 
   const placeShipsRandomly = (shipList) => {
     shipList.map((ship) => {
-      const { x, y } = getRandomCoords();
-      console.log(`x = ${x}, y = ${y}`);
-      const isVertical = getRandomOrientation();
-      console.log(`vertical = ${isVertical}`);
-      try {
-        addShip(x, y, ship.ship.getLength(), isVertical);
-      } catch (error) {
-        console.log('ships overlapping or out of bounds');
+      let retry = true;
+
+      while (retry) {
+        const newShip = shipFactory(ship.length);
+        const { x, y } = getRandomCoords();
+        const isVertical = getRandomOrientation();
+
+        if (isShipPlacementValid({ x: x, y: y, ship: newShip, isVertical })) {
+          addShip(x, y, ship.length, isVertical);
+          retry = false;
+        }
       }
     });
   }
