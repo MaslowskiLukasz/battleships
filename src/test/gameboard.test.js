@@ -1,4 +1,5 @@
 import gameboardFactory from "../gameboard";
+import ships from '../utils'
 
 describe('gameboard factory testing', () => {
   test('gameboard factory returns something', () => {
@@ -20,13 +21,13 @@ describe('gameboard factory testing', () => {
   test('create ship out of bounds - horizontal', () => {
     const gameboard = gameboardFactory();
     expect(() => gameboard.addShip(8, 0, 5))
-    .toThrow('ship out of bounds');
+    .toThrow('ship placement is not valid');
   });
 
   test('create ship out of bounds - vertical', () => {
     const gamebaord = gameboardFactory();
     expect(() => gamebaord.addShip(0, 8, 4, true))
-    .toThrow('ship out of bounds');
+    .toThrow('ship placement is not valid');
   });
 
   test('overlapping ships - horizontal', () => {
@@ -34,14 +35,14 @@ describe('gameboard factory testing', () => {
     gameboard.addShip(2, 6, 5);
     gameboard.addShip(2, 0, 5);
     expect(() => gameboard.addShip(1, 0, 3))
-    .toThrow('ships cannot overlap');
+    .toThrow('ship placement is not valid');
   });
 
   test('overlapping ships - vertical', () => {
     const gameboard = gameboardFactory();
     gameboard.addShip(3, 3, 5);
     expect(() => gameboard.addShip(5, 2, 4, true))
-    .toThrow('ships cannot overlap');
+    .toThrow('ship placement is not valid');
   });
 
   test('receiveAttack - adds miss to missed attacks - no ships on board (1)', () => {
@@ -109,7 +110,12 @@ describe('gameboard factory testing', () => {
     gameboard.addShip(0, 0, 2);
     gameboard.receiveAttack(0, 0);
     expect(gameboard.areAllShipsSunk()).toBe(false);
+  });
 
+  test('randomly place all ships', () => {
+    const gamebaord = gameboardFactory();
+    gamebaord.placeShipsRandomly(ships);
+    expect(gamebaord.getShips().length).toBe(ships.length);
   });
 
 });
