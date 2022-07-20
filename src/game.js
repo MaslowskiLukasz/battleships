@@ -1,4 +1,13 @@
-import { initUI, renderShips, getCoords, logStatus, logWinner, renderBoards, showEndScreen } from "./UIUtils";
+import { 
+  initUI,
+  renderShips,
+  getCoords,
+  logStatus,
+  logWinner,
+  renderBoards,
+  showEndScreen,
+  getVerticalStatus,
+  } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
 import ships from "./utils";
@@ -6,13 +15,13 @@ import ships from "./utils";
 /*
 TODO
 ui -> add restart functionality
-ui -> add button to rotate ship
 ui -> show where the ship will be placed
 */
 const player1 = player();
 const AI = player();
 const playerGameboard = gameboardFactory();
 const AIGameboard = gameboardFactory();
+let isShipVertical = false;
 
 const start = () => {
   initUI();
@@ -50,7 +59,7 @@ const placeShips = (event) => {
 
   const currentShipsNumber = playerGameboard.getShips().length;
   if (currentShipsNumber !== ships.length) {
-    playerGameboard.addShip(x, y, ships[currentShipsNumber].length);
+    playerGameboard.addShip(x, y, ships[currentShipsNumber].length, getVerticalStatus());
   }
 
   if (playerGameboard.getShips().length === ships.length) {
