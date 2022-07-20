@@ -25,11 +25,13 @@ function player() {
   const getRandomNumber = () => Math.floor(Math.random() * 10);
   const hasAlreadyHit = (x, y) => attacks.some((item) => item.x === x && item.y === y);
   const getAttacks = () => [...attacks];
+  const resetAttacks = () => attacks = [];
 
   return {
     attack,
     getAttacks,
     generateNextMove,
+    resetAttacks,
   }
 }
 

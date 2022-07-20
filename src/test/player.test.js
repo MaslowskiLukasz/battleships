@@ -82,4 +82,16 @@ describe('player testing', () => {
     expect(uniqueValues.size).toBe(generatedMoves.length);
   });
 
+  test('reset attack list', () => {
+    const player1 = player();
+    const board = gameboardFactory();
+    
+    board.addShip(0, 0, 5);
+    player1.attack(0, 0, board);
+    player1.attack(2, 0, board);
+
+    player1.resetAttacks();
+    expect(player1.getAttacks().length).toBe(0);
+  });
+
 });
