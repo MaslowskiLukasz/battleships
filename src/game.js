@@ -21,11 +21,18 @@ const player1 = player();
 const AI = player();
 const playerGameboard = gameboardFactory();
 const AIGameboard = gameboardFactory();
-let isShipVertical = false;
 
 const start = () => {
+  reset();
   initUI();
   initGame();
+}
+
+const reset = () => {
+  player1.resetAttacks();
+  AI.resetAttacks();
+  playerGameboard.reset();
+  AIGameboard.reset();
 }
 
 const initGame = () => {
