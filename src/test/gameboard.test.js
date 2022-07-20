@@ -118,4 +118,17 @@ describe('gameboard factory testing', () => {
     expect(gamebaord.getShips().length).toBe(ships.length);
   });
 
+  test('reset gameboard', () => {
+    const gamebaord = gameboardFactory();
+    gamebaord.addShip(0, 0, 5);
+    gamebaord.addShip(0, 3, 4);
+    gamebaord.receiveAttack(0, 0);
+    gamebaord.receiveAttack(9, 9);
+
+    gamebaord.reset();
+    expect(gamebaord.getShips().length).toBe(0);
+    expect(gamebaord.getMisses().length).toBe(0);
+    expect(gamebaord.getHits().length).toBe(0);
+  });
+
 });

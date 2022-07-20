@@ -105,6 +105,12 @@ function gameboardFactory() {
     return ships.every((item) => item.ship.isSunk());
   }
 
+  const reset = () => {
+    ships = [];
+    missed = [];
+    hits = [];
+  }
+
   const addMissed = (x, y) => missed.push( {x: x, y: y} );
   const addHit = (x, y) => hits.push( {x: x, y: y} );
   const getShips = () => [...ships];  
@@ -125,6 +131,7 @@ function gameboardFactory() {
     getHits,
     areAllShipsSunk,
     placeShipsRandomly,
+    reset,
   }
 }
 
