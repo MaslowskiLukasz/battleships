@@ -1,7 +1,9 @@
 const createGameScreen = () => {
   const wrapper = document.createElement('div');
+  const verticalBtn = createToggleVerticalButton();
   wrapper.appendChild(createPlayerScreen('AI', true));
   wrapper.appendChild(createPlayerScreen('Player', false));
+  wrapper.appendChild(verticalBtn);
   wrapper.id = 'boards-wrapper';
   wrapper.classList.add('hidden');
   
@@ -161,6 +163,28 @@ const renderHits = (board, isAI) => {
   });
 }
 
+const createToggleVerticalButton = () => {
+  const button = document.createElement('button');
+  
+  button.id = 'toggle-vertical-btn';
+  button.textContent = 'Change orientation';
+  button.setAttribute('isVertical', "false");
+  button.addEventListener('click', changeOrientation);
+
+  return button;
+}
+
+const getVerticalStatus = () => {
+  const button = document.getElementById('toggle-vertical-btn');
+  
+  return button.getAttribute('isVertical') === 'true' ? true : false;
+}
+
+const changeOrientation = (event) => {
+  const button = event.target;
+  button.setAttribute('isVertical', !getVerticalStatus());
+}
+
 const logWinner = (playerGameboard, AIGameboard) => {
   if(playerGameboard.areAllShipsSunk()) {
     console.log('AI won');
@@ -197,4 +221,5 @@ export {
   logWinner,
   renderBoards,
   showEndScreen,
+  getVerticalStatus,
 };
