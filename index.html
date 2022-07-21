@@ -5,6 +5,27 @@
     <title>Battleship</title>
   </head>
   <body>
+    <div id="start-screen">
+      <h1>Welcome to Battleships</h1>
+      <button id="start-btn" class="btn">Start</button>
+    </div>
+    <div id="game-screen" class="hidden">
+      <div>
+        <h2 id="player-name">Player</h2>
+        <div id="player-board" class="board">
+        </div>
+      </div>
+      <div>
+        <h2 id="ai-name">AI</h2>
+        <div id="ai-board" class="board">
+        </div>
+      </div>
+      <button id="toggle-vertical-btn">Change orientation</button> 
+    </div>
+    <div id="end-screen" class="hidden">
+      <h1>Game over</h1>
+      <button id="reset-btn">Restart</button>
+    </div>
     <script src="main.js"></script>
   </body>
 </html>
