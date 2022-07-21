@@ -40,9 +40,13 @@ const showEndScreen = () => {
   const gameScreen = document.getElementById('boards-wrapper');
   const wrapper = document.createElement('div');
   const header = document.createElement('h1');
+  const resetBtn = document.createElement('button');
   
   header.textContent = 'Game over';
+  resetBtn.textContent = 'Restart';
+  resetBtn.id = 'reset-btn';
   wrapper.appendChild(header);
+  wrapper.appendChild(resetBtn);
   
   gameScreen.classList.add('hidden');
   body.appendChild(wrapper);
@@ -185,6 +189,12 @@ const changeOrientation = (event) => {
   button.setAttribute('isVertical', !getVerticalStatus());
 }
 
+const setUpReset = (callback) => {
+  const resetBtn = document.getElementById('reset-btn');
+
+  resetBtn.addEventListener('click', callback);
+}
+
 const logWinner = (playerGameboard, AIGameboard) => {
   if(playerGameboard.areAllShipsSunk()) {
     console.log('AI won');
@@ -222,4 +232,5 @@ export {
   renderBoards,
   showEndScreen,
   getVerticalStatus,
+  setUpReset,
 };

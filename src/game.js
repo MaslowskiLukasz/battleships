@@ -7,6 +7,7 @@ import {
   renderBoards,
   showEndScreen,
   getVerticalStatus,
+  setUpReset,
   } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
@@ -96,6 +97,7 @@ const checkGameOver = () => {
   if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
     logWinner(playerGameboard, AIGameboard);
     showEndScreen();
+    setUpReset(start);
   }
 }
 
