@@ -1,98 +1,74 @@
-const createGameScreen = () => {
-  const wrapper = document.createElement('div');
-  const verticalBtn = createToggleVerticalButton();
-  wrapper.appendChild(createPlayerScreen('AI', true));
-  wrapper.appendChild(createPlayerScreen('Player', false));
-  wrapper.appendChild(verticalBtn);
-  wrapper.id = 'boards-wrapper';
-  wrapper.classList.add('hidden');
-  
-  return wrapper;
+const initUI = (resetCallback) => {
+  const startButton = document.getElementById('start-btn');
+
+  startButton.addEventListener('click', showGameScreen);
+  showStartScreen();
+  createGameScreen();
+  setUpReset(resetCallback);
 }
 
-const initUI = () => {
-  const body = document.body;
-  const startScreen = document.createElement('div');
-  const header = document.createElement('h1');
-  const startButton = document.createElement('button');
-  const boards = createGameScreen();
+const showStartScreen = () => {
+  const screen = document.getElementById('start-screen');
+  showElement(screen);
+}
 
-  header.textContent = 'Welcome to Battleships';
-  startButton.textContent = 'Start';
-  startButton.addEventListener('click', showGameScreen);
-  startScreen.id = 'start-screen';
+const showElement = (element) => {
+  element.classList.remove('hidden');
+}
 
-  startScreen.appendChild(header);
-  startScreen.appendChild(startButton);  
-  body.appendChild(startScreen);
-  body.appendChild(boards);
+const hideElement = (element) => {
+  element.classList.add('hidden');
+}
+
+const createGameScreen = () => {
+  createToggleVerticalButton();
+  createBoard();
+}
+
+const createToggleVerticalButton = () => {
+  const button = document.getElementById('toggle-vertical-btn');
+  
+  button.setAttribute('isVertical', "false");
+  button.addEventListener('click', changeOrientation);
+}
+
+const createBoard = () => {
+  const boards = document.querySelectorAll('.board');
+
+  boards.forEach((board) => {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        const area = document.createElement('button');
+        area.className = 'area';
+        area.setAttribute('x', x);
+        area.setAttribute('y', y);
+  
+        board.appendChild(area);
+      }
+    }
+  });
 }
 
 const showGameScreen = () => {
-  const boards = document.getElementById('boards-wrapper');
+  const boards = document.getElementById('game-screen');
   const startScreen = document.getElementById('start-screen');
-  startScreen.classList.add('hidden');
-  boards.classList.remove('hidden');
+  hideElement(startScreen);
+  showElement(boards);
 }
 
 const showEndScreen = () => {
-  const body = document.body;
-  const gameScreen = document.getElementById('boards-wrapper');
-  const wrapper = document.createElement('div');
-  const header = document.createElement('h1');
-  const resetBtn = document.createElement('button');
+  const gameScreen = document.getElementById('game-screen');
+  const endScreen = document.getElementById('end-screen');
   
-  header.textContent = 'Game over';
-  resetBtn.textContent = 'Restart';
-  resetBtn.id = 'reset-btn';
-  wrapper.appendChild(header);
-  wrapper.appendChild(resetBtn);
-  
-  gameScreen.classList.add('hidden');
-  body.appendChild(wrapper);
+  hideElement(gameScreen);
+  showElement(endScreen);
 }
 
-const createPlayerScreen = (name, isAI) => {
-  const wrapper = document.createElement('div');
-  const playerName = document.createElement('h2');
-  const board = createBoard(isAI);
+const addAreaEventListeners = (id, callback) => {
+  const playerBoard = document.getElementById(id);
+  const areas = playerBoard.querySelectorAll('.area');
 
-  if (isAI) {
-    board.id = 'ai-board';
-  } else {
-    board.id = 'player-board';
-  }
-  
-  playerName.textContent = name;
-
-  wrapper.appendChild(playerName);
-  wrapper.append(board);
-
-  return wrapper;
-}
-
-/*
-TODO:
-add id playerBoard to players board
-*/
-const createBoard = (isInteractive) => {
-  const wrapper = document.createElement('div');
-
-  wrapper.className = 'board';
-
-  for (let y = 0; y < 10; y++) {
-    for (let x = 0; x < 10; x++) {
-      const area = document.createElement('button');
-      //area.disabled = !isInteractive;
-      area.className = 'area';
-      area.setAttribute('x', x);
-      area.setAttribute('y', y);
-
-      wrapper.appendChild(area);
-    }
-  }
-
-  return wrapper;
+  areas.forEach((area) => area.addEventListener('click', callback));
 }
 
 const renderShips = (shipPlacement, isAI) => {
@@ -110,6 +86,7 @@ const renderShips = (shipPlacement, isAI) => {
       for (let y = startY; y < startY + currShip.ship.getLength(); y++) {
         const area = playerBoard.querySelector(`[x="${startX}"][y="${y}"]`);
         area.textContent = 'X';
+        area.classList.add('ship');
       }
     } else {
       for (let x = startX; x < startX + currShip.ship.getLength(); x++) {
@@ -167,17 +144,6 @@ const renderHits = (board, isAI) => {
   });
 }
 
-const createToggleVerticalButton = () => {
-  const button = document.createElement('button');
-  
-  button.id = 'toggle-vertical-btn';
-  button.textContent = 'Change orientation';
-  button.setAttribute('isVertical', "false");
-  button.addEventListener('click', changeOrientation);
-
-  return button;
-}
-
 const getVerticalStatus = () => {
   const button = document.getElementById('toggle-vertical-btn');
   
@@ -195,42 +161,35 @@ const setUpReset = (callback) => {
   resetBtn.addEventListener('click', callback);
 }
 
-const logWinner = (playerGameboard, AIGameboard) => {
-  if(playerGameboard.areAllShipsSunk()) {
-    console.log('AI won');
-    console.log(
-      `Player hit: ${AIGameboard.getHits().length} times.
-      AI hit: ${playerGameboard.getHits().length} times`
-    );
-  } else {
-    console.log('Player won');
-    console.log(
-      `Player hit: ${AIGameboard.getHits().length} times.
-      AI hit: ${playerGameboard.getHits().length} times`
-    );
-  }
+const resetUI = () => {
+  const areas = document.querySelectorAll('.area');
+  const endScreen = document.getElementById('end-screen');
+  const gameScreen = document.getElementById('game-screen');
+
+  areas.forEach((area) => {
+    area.classList.remove('hit');
+    area.classList.remove('miss');
+    area.classList.remove('ship');
+    area.textContent = '';
+    removeEventListeners(area);
+  });
+
+  hideElement(endScreen);
+  showElement(gameScreen);
 }
 
-const logStatus = (playerGameboard, AIGameboard) => {
-  console.log(
-    `Player hit: ${AIGameboard.getHits().length} times.
-    Player missed: ${AIGameboard.getMisses().length} times`
-  );
-
-  console.log(
-    `AI hit: ${playerGameboard.getHits().length} times.
-    AI missed: ${playerGameboard.getMisses().length} times`
-  );
+const removeEventListeners = (element) => {
+  const newElement = element.cloneNode(true);
+  element.parentNode.replaceChild(newElement, element);
 }
 
 export {
   initUI, 
   renderShips,
   getCoords,
-  logStatus,
-  logWinner,
   renderBoards,
   showEndScreen,
   getVerticalStatus,
-  setUpReset,
+  resetUI,
+  addAreaEventListeners,
 };
