@@ -52,15 +52,19 @@ const createBoard = () => {
 const showGameScreen = () => {
   const boards = document.getElementById('game-screen');
   const startScreen = document.getElementById('start-screen');
+  const gameHeader = document.getElementById('game-header');
   hideElement(startScreen);
+  showElement(gameHeader);
   showElement(boards);
 }
 
-const showEndScreen = () => {
-  const gameScreen = document.getElementById('game-screen');
+const showEndScreen = (playerWon) => {
+  const gameHeader = document.getElementById('game-header');
   const endScreen = document.getElementById('end-screen');
-  
-  hideElement(gameScreen);
+  const winner = document.getElementById('winner');
+
+  winner.textContent = playerWon ? 'Player won' : 'AI won';
+  hideElement(gameHeader);
   showElement(endScreen);
 }
 
@@ -85,13 +89,11 @@ const renderShips = (shipPlacement, isAI) => {
     if (currShip.isVertical) {
       for (let y = startY; y < startY + currShip.ship.getLength(); y++) {
         const area = playerBoard.querySelector(`[x="${startX}"][y="${y}"]`);
-        area.textContent = 'X';
         area.classList.add('ship');
       }
     } else {
       for (let x = startX; x < startX + currShip.ship.getLength(); x++) {
         const area = playerBoard.querySelector(`[x="${x}"][y="${startY}"]`);
-        area.textContent = '0';
         area.classList.add('ship');
       }
     }
@@ -165,6 +167,7 @@ const resetUI = () => {
   const areas = document.querySelectorAll('.area');
   const endScreen = document.getElementById('end-screen');
   const gameScreen = document.getElementById('game-screen');
+  const gameHeader = document.getElementById('game-header');
 
   areas.forEach((area) => {
     area.classList.remove('hit');
@@ -175,6 +178,7 @@ const resetUI = () => {
   });
 
   hideElement(endScreen);
+  showElement(gameHeader);
   showElement(gameScreen);
 }
 

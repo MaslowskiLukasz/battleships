@@ -12,10 +12,6 @@ import player from "./player"
 import gameboardFactory from "./gameboard";
 import ships from "./utils";
 
-/*
-TODO
-ui -> show where the ship will be placed
-*/
 const player1 = player();
 const AI = player();
 const playerGameboard = gameboardFactory();
@@ -37,7 +33,6 @@ const reset = () => {
 
 const initGame = () => {
   AIGameboard.placeShipsRandomly(ships);
-  renderShips(AIGameboard.getShips(), true);
   renderShips(playerGameboard.getShips(), false);
 
   addAreaEventListeners('player-board', placeShips);
@@ -74,7 +69,7 @@ const attack = (event) => {
 
 const checkGameOver = () => {
   if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
-    showEndScreen();
+    showEndScreen(AIGameboard.areAllShipsSunk());
   }
 }
 

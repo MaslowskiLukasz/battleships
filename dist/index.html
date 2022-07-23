@@ -5,26 +5,95 @@
     <title>Battleship</title>
   </head>
   <body>
-    <div id="start-screen">
+    <div id="start-screen" class="header">
       <h1>Welcome to Battleships</h1>
       <button id="start-btn" class="btn">Start</button>
+      <div class="instructions">
+        <h2>How to play:</h2>
+        <ol>
+          <li>Place your fleet (use button at the top to change ship orientation)</li>
+          <li>Click on enemy board to command an attack</li>
+          <li>Hits will be marked with red and misses with blue</li>
+          <li>Try to sink all enemy ships</li>
+        </ol>
+      </div>
+    </div>
+    <div id="game-header" class=" header hidden">
+      <h1>Battleships</h1>
+      <button id="toggle-vertical-btn" class="btn">Rotate ship</button>
+    </div>
+    <div id="end-screen" class="header hidden">
+      <h1 id="winner">Game over</h1>
+      <button id="reset-btn" class="btn">Restart</button>
     </div>
     <div id="game-screen" class="hidden">
-      <div>
-        <h2 id="player-name">Player</h2>
-        <div id="player-board" class="board">
+      <div id="board-wrapper">
+        <div>
+          <h2 id="player-name">Player</h2>
+          <div id="player-board" class="board">
+          </div>
+        </div>
+        <div>
+          <h2 id="ai-name">AI</h2>
+          <div id="ai-board" class="board">
+          </div>
         </div>
       </div>
-      <div>
-        <h2 id="ai-name">AI</h2>
-        <div id="ai-board" class="board">
+      <div class="legend">
+        <p>Ship list</p>
+        <div class="ship-entry">
+          <div class="left">
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+          </div>
+          <div class="right">
+            <div> - Carrier</div>
+          </div>
+        </div>
+        <div class="ship-entry">
+          <div class="left">
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+          </div>
+          <div>
+            <div class="right"> - Battleship</div>
+          </div>
+        </div>
+        <div class="ship-entry">
+          <div class="left">
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+          </div>
+          <div class="right">
+            <div> - Destroyer</div>
+          </div>
+        </div>
+        <div class="ship-entry">
+          <div class="left">
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+          </div>
+          <div class="right">
+            <div> - Submarine</div>
+          </div>
+        </div>
+        <div class="ship-entry">
+          <div class="left">
+            <div class="legend-area"></div>
+            <div class="legend-area"></div>
+          </div>
+          <div class="right">
+            <div> - Patrol Boat</div>
+          </div>
         </div>
       </div>
-      <button id="toggle-vertical-btn">Change orientation</button> 
-    </div>
-    <div id="end-screen" class="hidden">
-      <h1>Game over</h1>
-      <button id="reset-btn">Restart</button>
     </div>
     <script src="main.js"></script>
   </body>

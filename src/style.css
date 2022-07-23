@@ -1,6 +1,59 @@
+:root {
+  --primary: #125B50;
+  --secondary: #F8B400;
+  --light-text: #FAF5E4;
+  --dark-text: #000000;
+  --background: #000000;
+  --hit-color: #FF6363;
+  --miss-color: #ABC9FF;
+}
+
+html {
+  height: 100%;
+}
+
 body {
-  color: white;
-  background-color: black;
+  margin: 0;
+  min-height: 100%;
+  color: var(--light-text);
+  background-color: var(--background);
+}
+
+ol {
+  text-align: left;
+}
+
+.instructions {
+  margin-top: 10em;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+#game-screen {
+  width: 80%;
+  padding-top: 2em;
+  margin: auto;
+  text-align: center;
+}
+
+.header {
+  padding-top: 5em;
+  width: 80%;
+  margin: auto;
+  text-align: center;
+}
+
+#winner {
+  color: var(--secondary);
+}
+
+#board-wrapper {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  margin-bottom: 5em;
 }
 
 .board {
@@ -10,27 +63,69 @@ body {
 }
 
 .area {
+  border: 0;
   min-width: 2em;
   min-height: 2em;
-  border: 1px solid white;
+  margin: .1em;
+  background-color: var(--light-text);
 }
 
-.hit {
-  background-color: #F37878;
-}
-
-.miss {
-  background-color: #ABC9FF;
+.area:hover {
+  background-color: var(--secondary);
 }
 
 .ship {
-  border: 1px solid black;
+  background-color: var(--primary);
+}
+
+.hit {
+  background-color: var(--hit-color);
+}
+
+.miss {
+  background-color: var(--miss-color);
+}
+
+.btn {
+  background-color: var(--primary);
+  color: var(--light-text);
+  font-size: 16px;
+  font-weight: bold;
+  border: 0;
+  padding: 1em;
+  transition: background-color .2s ease-in-out, color .2s ease-in-out;
+}
+
+.btn:hover {
+  background-color: var(--secondary);
+  color: var(--dark-text);
 }
 
 .hidden {
   display: none;
 }
 
-.found {
-  border: 2px solid red;
+.legend {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.ship-entry {
+  width: 12em;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.left {
+  display: flex;
+  align-items: flex-end;
+}
+
+.legend-area {
+  min-width: 1em;
+  min-height: 1em;
+  margin: .1em;
+  background-color: var(--light-text);
 }
