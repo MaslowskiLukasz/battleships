@@ -8,6 +8,8 @@
 
 [LIVE](https://maslowskilukasz.github.io/battleships/)
 
+![mockup](https://user-images.githubusercontent.com/26800508/180892834-12adc067-677f-4a08-b851-a1db3129535a.jpg)
+
 ## Description
 
 I made this project to get comfortable with Test Driven Development and unit tests using Jest. Place your ships by clicking on your board and take turns attacking your opponent's gameboard. Sink all enemy ships to win the game.
