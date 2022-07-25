@@ -72,12 +72,15 @@ const showEndScreen = (playerWon) => {
   showElement(endScreen);
 }
 
-const addAreaEventListeners = (id, callback) => {
+const addAreaEventListeners = (id, callback, placementCallback) => {
   const playerBoard = document.getElementById(id);
   const areas = playerBoard.querySelectorAll('.area');
 
   areas.forEach((area) => {
     area.addEventListener('click', callback);
+    if (id === 'player-board') {
+      area.addEventListener('mouseover', placementCallback);
+    }
   });
 }
 
@@ -231,6 +234,41 @@ const removeAreaHoverEffect = (boardName) => {
   })
 }
 
+const renderCurrentShip = (target, length) => {
+  const playerBoard = document.getElementById('player-board');
+  const areas = playerBoard.querySelectorAll('.area');
+  const { x, y } = getCoords(target);
+  const isVertical = getVerticalStatus();
+
+  areas.forEach((area) => area.classList.remove('ship-placement-hover'));
+  
+  if (isVertical) {
+    for (let i = y; i < y + length; i++) {
+      if (x < 10 && i < 10) {
+        const area = playerBoard.querySelector(`[x="${x}"][y="${i}"]`);
+        area.classList.add('ship-placement-hover');
+      }
+    }
+  } else {
+    for (let i = x; i < x + length; i++) {
+      if (i < 10 && y < 10) {
+        const area = playerBoard.querySelector(`[x="${i}"][y="${y}"]`);
+        area.classList.add('ship-placement-hover');
+      }
+    }
+  }
+}
+
+const removeShipPlacementIndication = () => {
+  const playerBoard = document.getElementById('player-board');
+  const areas = playerBoard.querySelectorAll('.area');
+
+  areas.forEach((area) => {
+    area.classList.remove('ship-placement-hover');
+    removeEventListeners(area);
+  });
+}
+
 export {
   initUI, 
   renderShips,
@@ -241,4 +279,6 @@ export {
   resetUI,
   addAreaEventListeners,
   showAttackInstructions,
+  renderCurrentShip,
+  removeShipPlacementIndication,
 };

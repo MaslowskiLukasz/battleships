@@ -134,3 +134,7 @@ ol {
   margin: .1em;
   background-color: var(--light-text);
 }
+
+.ship-placement-hover {
+  background-color: var(--secondary);
+}

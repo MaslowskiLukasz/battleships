@@ -8,6 +8,8 @@ import {
   resetUI,
   addAreaEventListeners,
   showAttackInstructions,
+  renderCurrentShip,
+  removeShipPlacementIndication,
   } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
@@ -36,7 +38,7 @@ const initGame = () => {
   AIGameboard.placeShipsRandomly(ships);
   renderShips(playerGameboard.getShips(), false);
 
-  addAreaEventListeners('player-board', placeShips);
+  addAreaEventListeners('player-board', placeShips, indicateShipPlacement);
 }
 
 const placeShips = (event) => {
@@ -50,6 +52,7 @@ const placeShips = (event) => {
   if (playerGameboard.getShips().length === ships.length) {
     addAreaEventListeners('ai-board', attack);
     showAttackInstructions();
+    removeShipPlacementIndication();
   }
 
   renderShips(playerGameboard.getShips(), false);
@@ -73,6 +76,11 @@ const checkGameOver = () => {
   if (playerGameboard.areAllShipsSunk() || AIGameboard.areAllShipsSunk()) {
     showEndScreen(AIGameboard.areAllShipsSunk());
   }
+}
+
+const indicateShipPlacement = (event) => {
+  const currentShipsNumber = playerGameboard.getShips().length;
+  renderCurrentShip(event.target, ships[currentShipsNumber].length);
 }
 
 export default start;
