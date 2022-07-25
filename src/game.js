@@ -7,6 +7,7 @@ import {
   getVerticalStatus,
   resetUI,
   addAreaEventListeners,
+  showAttackInstructions,
   } from "./UIUtils";
 import player from "./player"
 import gameboardFactory from "./gameboard";
@@ -48,6 +49,7 @@ const placeShips = (event) => {
 
   if (playerGameboard.getShips().length === ships.length) {
     addAreaEventListeners('ai-board', attack);
+    showAttackInstructions();
   }
 
   renderShips(playerGameboard.getShips(), false);

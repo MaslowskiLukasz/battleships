@@ -39,10 +39,15 @@ ol {
 }
 
 .header {
-  padding-top: 5em;
+  padding-top: 3em;
   width: 80%;
   margin: auto;
   text-align: center;
+}
+
+.help {
+  margin-top: 2em;
+  color: var(--light-text);
 }
 
 #winner {

@@ -10,6 +10,7 @@ const initUI = (resetCallback) => {
 const showStartScreen = () => {
   const screen = document.getElementById('start-screen');
   showElement(screen);
+  showPlacementInstructions();
 }
 
 const showElement = (element) => {
@@ -177,6 +178,7 @@ const resetUI = () => {
     removeEventListeners(area);
   });
 
+  showPlacementInstructions();
   hideElement(endScreen);
   showElement(gameHeader);
   showElement(gameScreen);
@@ -185,6 +187,22 @@ const resetUI = () => {
 const removeEventListeners = (element) => {
   const newElement = element.cloneNode(true);
   element.parentNode.replaceChild(newElement, element);
+}
+
+const showAttackInstructions = () => {
+  const shipPlacementHelp = document.getElementById('ship-placement-help');
+  const attackHelp = document.getElementById('attack-help');
+
+  hideElement(shipPlacementHelp);
+  showElement(attackHelp);
+}
+
+const showPlacementInstructions = () => {
+  const shipPlacementHelp = document.getElementById('ship-placement-help');
+  const attackHelp = document.getElementById('attack-help');
+
+  hideElement(attackHelp);
+  showElement(shipPlacementHelp);
 }
 
 export {
@@ -196,4 +214,5 @@ export {
   getVerticalStatus,
   resetUI,
   addAreaEventListeners,
+  showAttackInstructions,
 };
