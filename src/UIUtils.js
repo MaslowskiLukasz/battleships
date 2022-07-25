@@ -54,9 +54,12 @@ const showGameScreen = () => {
   const boards = document.getElementById('game-screen');
   const startScreen = document.getElementById('start-screen');
   const gameHeader = document.getElementById('game-header');
+
   hideElement(startScreen);
   showElement(gameHeader);
   showElement(boards);
+  addAreaHoverEffect('ai-board');
+  addAreaHoverEffect('player-board');
 }
 
 const showEndScreen = (playerWon) => {
@@ -73,7 +76,9 @@ const addAreaEventListeners = (id, callback) => {
   const playerBoard = document.getElementById(id);
   const areas = playerBoard.querySelectorAll('.area');
 
-  areas.forEach((area) => area.addEventListener('click', callback));
+  areas.forEach((area) => {
+    area.addEventListener('click', callback);
+  });
 }
 
 const renderShips = (shipPlacement, isAI) => {
@@ -113,6 +118,7 @@ const renderBoards = (playerGameboard, AIGameboard) => {
   renderHits(playerGameboard, false);
   renderMisses(AIGameboard, true);
   renderHits(AIGameboard, true);
+  removeAreaHoverEffect('ai-board');
 }
 
 const renderMisses = (board, isAI) => {
@@ -182,6 +188,8 @@ const resetUI = () => {
   hideElement(endScreen);
   showElement(gameHeader);
   showElement(gameScreen);
+  addAreaHoverEffect('ai-board');
+  addAreaHoverEffect('player-board');
 }
 
 const removeEventListeners = (element) => {
@@ -203,6 +211,24 @@ const showPlacementInstructions = () => {
 
   hideElement(attackHelp);
   showElement(shipPlacementHelp);
+}
+
+const addAreaHoverEffect = (boardName) => {
+  const board = document.getElementById(boardName);
+  const areas = board.querySelectorAll('.area');
+
+  areas.forEach((area) => area.classList.add('area-hover'));
+}
+
+const removeAreaHoverEffect = (boardName) => {
+  const board = document.getElementById(boardName);
+  const areas = board.querySelectorAll('.area');
+  
+  areas.forEach((area) => {
+    if (area.classList.contains('hit') || area.classList.contains('miss')) {
+      area.classList.remove('area-hover');
+    }
+  })
 }
 
 export {

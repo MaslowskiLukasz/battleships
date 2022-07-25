@@ -75,7 +75,7 @@ ol {
   background-color: var(--light-text);
 }
 
-.area:hover {
+.area-hover:hover {
   background-color: var(--secondary);
 }
 
