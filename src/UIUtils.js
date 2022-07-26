@@ -91,20 +91,13 @@ const renderShips = (shipPlacement, isAI) => {
   } else {
     playerBoard = document.getElementById('player-board');
   }
+  
   shipPlacement.map((currShip) => {
-    const startX = currShip.x;
-    const startY = currShip.y;
-
-    if (currShip.isVertical) {
-      for (let y = startY; y < startY + currShip.ship.getLength(); y++) {
-        const area = playerBoard.querySelector(`[x="${startX}"][y="${y}"]`);
-        area.classList.add('ship');
-      }
-    } else {
-      for (let x = startX; x < startX + currShip.ship.getLength(); x++) {
-        const area = playerBoard.querySelector(`[x="${x}"][y="${startY}"]`);
-        area.classList.add('ship');
-      }
+    for (let i = 0; i < currShip.ship.getLength(); i++) {
+      const x = currShip.isVertical ? currShip.x : currShip.x + i;
+      const y = currShip.isVertical ? currShip.y + i : currShip.y;
+      const area = playerBoard.querySelector(`[x="${x}"][y="${y}"]`);
+      area.classList.add('ship');
     }
   });
 }
@@ -121,6 +114,8 @@ const renderBoards = (playerGameboard, AIGameboard) => {
   renderHits(playerGameboard, false);
   renderMisses(AIGameboard, true);
   renderHits(AIGameboard, true);
+  renderSunkShips(playerGameboard, false);
+  renderSunkShips(AIGameboard, true);
   removeAreaHoverEffect('ai-board');
 }
 
@@ -241,20 +236,13 @@ const renderCurrentShip = (target, length) => {
   const isVertical = getVerticalStatus();
 
   areas.forEach((area) => area.classList.remove('ship-placement-hover'));
-  
-  if (isVertical) {
-    for (let i = y; i < y + length; i++) {
-      if (x < 10 && i < 10) {
-        const area = playerBoard.querySelector(`[x="${x}"][y="${i}"]`);
-        area.classList.add('ship-placement-hover');
-      }
-    }
-  } else {
-    for (let i = x; i < x + length; i++) {
-      if (i < 10 && y < 10) {
-        const area = playerBoard.querySelector(`[x="${i}"][y="${y}"]`);
-        area.classList.add('ship-placement-hover');
-      }
+
+  for (let i = 0; i < length; i++) {
+    const currX = isVertical ? x : x + i;
+    const currY = isVertical ? y + i : y;
+    if (currX < 10 && currY < 10) {
+      const area = playerBoard.querySelector(`[x="${currX}"][y="${currY}"]`);
+      area.classList.add('ship-placement-hover');
     }
   }
 }
@@ -266,6 +254,29 @@ const removeShipPlacementIndication = () => {
   areas.forEach((area) => {
     area.classList.remove('ship-placement-hover');
     removeEventListeners(area);
+  });
+}
+
+const renderSunkShips = (board, isAI) => {
+  const ships = board.getShips();
+  
+  let gameboard;
+  if (isAI) {
+    gameboard = document.getElementById('ai-board');
+  } else {
+    gameboard = document.getElementById('player-board');
+  }
+
+  ships.map((ship) => {
+    if (ship.ship.isSunk()) {
+      for (let i = 0; i < ship.ship.getLength(); i++) {
+        const x = ship.isVertical ? ship.x : ship.x + i;
+        const y = ship.isVertical ? ship.y + i : ship.y
+        const area = gameboard.querySelector(`[x="${x}"][y="${y}"]`);
+        area.textContent = 'X';
+        area.classList.add('sunk');
+      }
+    }
   });
 }
 
